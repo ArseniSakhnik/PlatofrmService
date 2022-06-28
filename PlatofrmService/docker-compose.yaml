@@ -1,0 +1,11 @@
+﻿version: '3'
+services:
+  sqlserver: 
+    container_name: "postgresql"
+    image: "postgres:13.3"
+    environment:
+      POSTGRES_DB: "postgresdb"
+      POSTGRES_USER: "postgresdbpguser"
+      POSTGRES_PASSWORD: "pgpwd4postgres"
+    ports:
+      - "5432:5432"
