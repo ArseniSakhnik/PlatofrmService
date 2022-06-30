@@ -1,6 +1,27 @@
 ﻿version: '3'
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  app_database:
+    external:
+      name: app_database
+
 services:
-  sqlserver: 
+  backend:
+    build:
+      context: .
+      dockerfile: dockerfile
+    container_name: backend
+    ports:
+      - "8080:80"
+    networks:
+      - app-network
+    depends_on:
+      - app_database
+  app_database:
     container_name: "postgresql"
     image: "postgres:13.3"
     environment:
@@ -9,3 +30,7 @@ services:
       POSTGRES_PASSWORD: "pgpwd4postgres"
     ports:
       - "5432:5432"
+    volumes:
+      - app_database:/var/lib/postgresql/data
+    networks:
+      - app-network
