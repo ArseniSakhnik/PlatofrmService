@@ -28,12 +28,15 @@ namespace PlatofrmService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var connectionString = Configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<AppDbContext>(opt =>
+                opt.UseInMemoryDatabase("InMem"));
 
-            services.AddDbContext<AppDbContext>(options =>
-            {
-                options.UseNpgsql(connectionString);
-            });
+            //todo Можно подключить postgresql
+            //var connectionString = Configuration.GetConnectionString("DefaultConnection");
+            // services.AddDbContext<AppDbContext>(options =>
+            // {
+            //     options.UseNpgsql(connectionString);
+            // });
 
             services.AddControllers();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -60,6 +63,8 @@ namespace PlatofrmService
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            
+            PrepDb.PrepPopulation(app);
         }
     }
 }
