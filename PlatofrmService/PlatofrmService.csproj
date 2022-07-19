@@ -16,8 +16,4 @@
         </PackageReference>
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="SyncDataService\Http" />
-    </ItemGroup>
-
 </Project>
