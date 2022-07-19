@@ -1,2 +1,4 @@
 ﻿kubectl delete deployment [...]
 kubectl get services
+kubectl get deployments
+kubectl apply -f
