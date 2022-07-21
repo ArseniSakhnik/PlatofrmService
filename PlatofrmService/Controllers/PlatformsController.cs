@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using PlatofrmService.Data;
 using PlatofrmService.Dtos;
 using PlatofrmService.Models;
+using PlatofrmService.SyncDataService.Http;
 
 namespace PlatofrmService.Controllers
 {
@@ -18,11 +19,17 @@ namespace PlatofrmService.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
+        private readonly ICommandDataClient _commandDataClient;
 
-        public PlatformsController(AppDbContext context, IMapper mapper)
+        public PlatformsController(
+            
+            AppDbContext context, 
+            IMapper mapper,
+            ICommandDataClient commandDataClient)
         {
             _context = context;
             _mapper = mapper;
+            _commandDataClient = commandDataClient;
         }
 
         [HttpGet]
@@ -47,6 +54,16 @@ namespace PlatofrmService.Controllers
             await _context.SaveChangesAsync();
 
             var platformModel = _mapper.Map<PlatformReadDto>(platform);
+
+            try
+            {
+                await _commandDataClient.SendPlatformToCommand(platformModel);
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine($"--> Could not send sync {exception.Message}");
+            }
+            
             return Ok(platformModel);
         }
     }
