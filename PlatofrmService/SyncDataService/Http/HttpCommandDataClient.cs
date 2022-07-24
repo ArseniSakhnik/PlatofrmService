@@ -28,7 +28,7 @@ namespace PlatofrmService.SyncDataService.Http
             var httpContent = new StringContent(content, encoding, mediaType);
 
             var serviceAddress = _configuration["CommandService"];
-            var url = $"{serviceAddress}/api/c/platforms";
+            var url = $"{serviceAddress}";
 
             var response = await _httpClient.PostAsync(url, httpContent);
 
